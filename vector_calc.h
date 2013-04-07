@@ -12,6 +12,8 @@ float **a;
 float boundary_x;
 float boundary_y;
 
+float time_step;
+
 void calculateNextPositions();
 
 void initialize_simulation_memory(char *file_name);

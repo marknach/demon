@@ -6,24 +6,22 @@
 #endif
 
 
-
-// 
+//Adding one unit of time velocity to position.
 void calculateNextPositions()
 {
 	printf("Calculating New Positions:\n");
 	for(int i = 0; i < number_of_vectors; i++)
 	{
-		p[i][0] += v[i][0];
-		p[i][1] += v[i][1];
-		p[i][2] += v[i][2];
+		p[i][0] += time_step * v[i][0];
+		p[i][1] += time_step * v[i][1];
+		p[i][2] += time_step * v[i][2];
 	}
 }
 
 
-// char *file_name : input file with initialization vectors
+
 void initialize_simulation_memory(char *file_name)
 {
-	// maybe global?
     boundary_x = 4;
 	boundary_y = 8;
 	
@@ -36,11 +34,7 @@ void initialize_simulation_memory(char *file_name)
 	}
 	
 	
-	char line[256];
-	number_of_vectors = 0;
 	
-	while (fgets(line, 256, input))
-		number_of_vectors++;
 	
 	printf("\n");
 	printf("Reading %d from %s.\n\n",number_of_vectors,file_name);
@@ -55,7 +49,7 @@ void initialize_simulation_memory(char *file_name)
     {
 		p[i] = (float *)malloc(3 * sizeof(float ));
 		v[i] = (float *)malloc(3 * sizeof(float ));
-		/*a[i] = (float *)malloc(3 * sizeof(float ));*/
+		a[i] = (float *)malloc(3 * sizeof(float ));
     }
 	
 	
@@ -98,7 +92,7 @@ void initialize_simulation_memory(char *file_name)
     
     printf("Initial Values:\n");
 
-    #ifdef DEBUG
+    
     printf("%-12s%-12s%-12s%-12s%-12s%-12s\n","P_x","P_y","P_z","V_x","V_y","V_z");
     for(int i = 0; i < number_of_vectors; i++)
     {
@@ -107,6 +101,8 @@ void initialize_simulation_memory(char *file_name)
     
     printf("\n");
     
+	
+	
     calculateNextPositions();
     
     printf("%-12s%-12s%-12s%-12s%-12s%-12s\n","P_x","P_y","P_z","V_x","V_y","V_z");
@@ -114,7 +110,6 @@ void initialize_simulation_memory(char *file_name)
     {
         printf("%-12lf%-12lf%-12lf%-12lf%-12lf%-12lf\n", p[i][0], p[i][1], p[i][2], v[i][0], v[i][1], v[i][2]); 
     }
-    #endif
 
 	fclose(input);
 }

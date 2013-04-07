@@ -8,4 +8,6 @@ int main(int argc, char *argv[])
 		exit(0);
 	}
     initialize_simulation_memory(argv[1]);
+	
+	
 }
