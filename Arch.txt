@@ -15,5 +15,3 @@ while ( t < maxtime )
 
 Conclusion
 	Output final positions 
-	
-	
