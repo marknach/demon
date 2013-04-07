@@ -1,0 +1,5 @@
+make and run with:
+
+
+gcc simulation.c vector_calc.c -lm -o Test -std=c99
+./Test derp.txt
