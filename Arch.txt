@@ -1,0 +1,19 @@
+Setup -
+	have our global vars 
+		timestep
+		size of area
+	
+	initialization / randomization
+	
+Main Loop
+
+while ( t < maxtime ) 
+	do one timestep
+		Move 
+		Detect colisions
+		MD?
+
+Conclusion
+	Output final positions 
+	
+	
