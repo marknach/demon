@@ -1,4 +1,5 @@
 #include <math.h>
+#include "vector_calc.h"
 
 int Collision(int **Balls, int size)
 {
@@ -20,27 +21,4 @@ int Collision(int **Balls, int size)
 	return 0;
 }
 
-int WallCollide(int **Balls, int size)
-{
-	int leftwall = 0;
-	int rightwall = 8;
-	int topwall = 8;
-	int bottomwall = 0;
 
-	int i;
-	for(i = 0; i < size; i++)
-	{
-		if(Balls[i][0] <= leftwall || Balls[i][0] >= rightwall)
-		{
-			return 1;
-		}
-		else if(Balls[i][1] <= bottomwall || Balls[i][1] >= topwall)
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-}
