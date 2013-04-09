@@ -165,7 +165,6 @@ void detect_ball_collision()
 			printf("D = %lf\n", D);
 			if(D < r[i] + r[j])
 			{
-				printf("HRNK\n");
 				collision[0] /= D;
 				collision[1] /= D;
 				float aci = v[i][0] * collision[0] + v[i][1] * collision[1]; 
