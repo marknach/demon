@@ -122,23 +122,23 @@ void detect_wall_collision()
 		if(p[i][0] <= lower_boundary_x)
 		{
 			v[i][0] = -1 * v[i][0];
-			p[i][0] = lower_boundary_x + 0.00001f; //hacky way of making sure the balls don't leave the boundaries
+			p[i][0] = lower_boundary_x + 0.0000001f; //hacky way of making sure the balls don't leave the boundaries
 		}
 		else if(p[i][0] >= upper_boundary_x)
 		{
 			v[i][0] = -1 * v[i][0];
-			p[i][0] = upper_boundary_x - 0.00001f; //hacky way of making sure the balls don't leave the boundaries
+			p[i][0] = upper_boundary_x - 0.0000001f; //hacky way of making sure the balls don't leave the boundaries
 		}
 		//hits horizontal wall
 		if(p[i][1] <= lower_boundary_y)
 		{
 			v[i][1] = -1 * v[i][1];
-			p[i][1] = lower_boundary_y + 0.00001f; //hacky way of making sure the balls don't leave the boundaries
+			p[i][1] = lower_boundary_y + 0.0000001f; //hacky way of making sure the balls don't leave the boundaries
 		}
 		else if(p[i][1] >= upper_boundary_y)
 		{
 			v[i][1] = -1 * v[i][1];
-			p[i][1] = upper_boundary_y - 0.00001f; //hacky way of making sure the balls don't leave the boundaries
+			p[i][1] = upper_boundary_y - 0.0000001f; //hacky way of making sure the balls don't leave the boundaries
 		}
 	}
 }
