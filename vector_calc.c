@@ -16,11 +16,11 @@ void calculateNextPositions()
 
 void initialize_simulation_memory(char *input_filename,  int direction)
 {
-    upper_boundary_x = 700;
-	upper_boundary_y = 700;
+    	upper_boundary_x = 4;
+	upper_boundary_y = 3;
 
 	
-	time_step = 0.001;
+	time_step = 0.00001;
 	
 	
 	FILE* input_file = fopen(input_filename, "r");
@@ -39,10 +39,9 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 	
 	//printf("\n");
 	//printf("Reading %d from %s.\n\n",number_of_vectors,input_filename);
-	p = (float **)malloc(number_of_vectors * sizeof(float *));
-    v = (float **)malloc(number_of_vectors * sizeof(float *));
-    a = (float **)malloc(number_of_vectors * sizeof(float *));
-    r = (float *)malloc(number_of_vectors * sizeof(float *));
+        p = (float **)malloc(number_of_vectors * sizeof(float *));
+        v = (float **)malloc(number_of_vectors * sizeof(float *));
+        r = (float *)malloc(number_of_vectors * sizeof(float *));
 	
 	fclose(input_file);
 	
@@ -51,7 +50,6 @@ void initialize_simulation_memory(char *input_filename,  int direction)
     {
 		p[i] = (float *)malloc(2 * sizeof(float ));
 		v[i] = (float *)malloc(2 * sizeof(float ));
-		a[i] = (float *)malloc(2 * sizeof(float ));
     }
 	
 	input_file = fopen(input_filename, "r");
@@ -90,8 +88,6 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 		v[i][0] *= direction;
 		fscanf(input_file,"%f",&v[i][1]);
 		v[i][1] *= direction;
-		fscanf(input_file,"%f",&a[i][0]);
-		fscanf(input_file,"%f",&a[i][1]);
 		
 		fscanf(input_file,"%f",&r[i]);
     }
@@ -106,26 +102,26 @@ void detect_wall_collision()
 	{
 		//hits vertical wall
 		//reverse
-		if(p[i][0] <= lower_boundary_x)
-		{
+		if(p[i][0] - r[i] <= lower_boundary_x)
+		{	
 			v[i][0] = -1 * v[i][0];
-			p[i][0] = lower_boundary_x + 0.0000001f; //hacky way of making sure the balls don't leave the boundaries
+			p[i][0] = lower_boundary_x + 0.0000001f + r[i]; //hacky way of making sure the balls don't leave the boundaries
 		}
-		else if(p[i][0] >= upper_boundary_x)
+		else if(p[i][0] + r[i] >= upper_boundary_x)
 		{
 			v[i][0] = -1 * v[i][0];
-			p[i][0] = upper_boundary_x - 0.0000001f; //hacky way of making sure the balls don't leave the boundaries
+			p[i][0] = upper_boundary_x - 0.0000001f - r[i]; //hacky way of making sure the balls don't leave the boundaries
 		}
 		//hits horizontal wall
-		if(p[i][1] <= lower_boundary_y)
+		if(p[i][1] - r[i] <= lower_boundary_y)
 		{
 			v[i][1] = -1 * v[i][1];
-			p[i][1] = lower_boundary_y + 0.0000001f; //hacky way of making sure the balls don't leave the boundaries
+			p[i][1] = lower_boundary_y + 0.0000001f + r[i]; //hacky way of making sure the balls don't leave the boundaries
 		}
-		else if(p[i][1] >= upper_boundary_y)
+		else if(p[i][1] + r[i] >= upper_boundary_y)
 		{
 			v[i][1] = -1 * v[i][1];
-			p[i][1] = upper_boundary_y - 0.0000001f; //hacky way of making sure the balls don't leave the boundaries
+			p[i][1] = upper_boundary_y - 0.0000001f - r[i]; //hacky way of making sure the balls don't leave the boundaries
 		}
 	}
 }

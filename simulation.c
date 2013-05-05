@@ -1,6 +1,6 @@
 #include "vector_calc.h"
 #include <string.h>
-const int number_of_steps = 50;
+const int number_of_steps = 500000;
 int forward;
 
 int main(int argc, char *argv[])
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	
 	for(int i = 0; i < number_of_vectors; i++)
 	{
-		 fprintf(output_file,"%-12lf%-12lf%-12lf%-12lf%-12lf%-12lf%-12lf\n",p[i][0],p[i][1],v[i][0],v[i][1],a[i][0],a[i][1],r[i]);
+		 fprintf(output_file,"%-12lf%-12lf%-12lf%-12lf%-12lf\n",p[i][0],p[i][1],v[i][0],v[i][1],r[i]);
 	}
 	fclose(output_file);
 	
