@@ -1,43 +1,29 @@
 #include "vector_calc.h"
-#define DEBUG
-
-#ifdef DEBUG
-#include <stdio.h>
-#endif
 
 
 //Adding one unit of time velocity to position.
 void calculateNextPositions()
 {
-	for(int i = 0; i < number_of_vectors - 1; i++)
+	for(int i = 0; i < number_of_vectors; i++)
 	{
-		fprintf(output_file,"%lf,%lf,",p[i][0],p[i][1]);
 		p[i][0] += time_step * v[i][0];
 		p[i][1] += time_step * v[i][1];
 	}
-	
-	int i = number_of_vectors - 1;
-	fprintf(output_file,"%lf,%lf",p[i][0],p[i][1]);
-	p[i][0] += time_step * v[i][0];
-	p[i][1] += time_step * v[i][1];
-	
-	fprintf(output_file,"\n");
 	
 	detect_ball_collision();
 	detect_wall_collision();
 }
 
-void initialize_simulation_memory(char *input_filename, char *output_filename)
+void initialize_simulation_memory(char *input_filename,  int direction)
 {
-    upper_boundary_x = 4;
-	upper_boundary_y = 8;
+    upper_boundary_x = 700;
+	upper_boundary_y = 700;
 
 	
-	time_step = 0.1;
+	time_step = 0.001;
 	
 	
-	input_file = fopen(input_filename, "r");
-	output_file = fopen(output_filename, "w");
+	FILE* input_file = fopen(input_filename, "r");
 	if(input_file == 0)
 	{
 		printf("input_file file %s not found.\n",input_filename);
@@ -51,8 +37,8 @@ void initialize_simulation_memory(char *input_filename, char *output_filename)
 		number_of_vectors++;
 	
 	
-	printf("\n");
-	printf("Reading %d from %s.\n\n",number_of_vectors,input_filename);
+	//printf("\n");
+	//printf("Reading %d from %s.\n\n",number_of_vectors,input_filename);
 	p = (float **)malloc(number_of_vectors * sizeof(float *));
     v = (float **)malloc(number_of_vectors * sizeof(float *));
     a = (float **)malloc(number_of_vectors * sizeof(float *));
@@ -101,8 +87,9 @@ void initialize_simulation_memory(char *input_filename, char *output_filename)
 		
 		
 		fscanf(input_file,"%f",&v[i][0]);
+		v[i][0] *= direction;
 		fscanf(input_file,"%f",&v[i][1]);
-		
+		v[i][1] *= direction;
 		fscanf(input_file,"%f",&a[i][0]);
 		fscanf(input_file,"%f",&a[i][1]);
 		
@@ -162,7 +149,7 @@ void detect_ball_collision()
 				collision[1] = 0;
 				D = 1.0f;
 			}
-			printf("D = %lf\n", D);
+			//printf("D = %lf\n", D);
 			if(D < r[i] + r[j])
 			{
 				collision[0] /= D;
@@ -180,11 +167,4 @@ void detect_ball_collision()
 			}
 		}
 	}
-}
-
-
-//This needs to be called to clean things up.
-void close_method()
-{
-	fclose(output_file);
 }

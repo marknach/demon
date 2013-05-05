@@ -18,18 +18,15 @@ float upper_boundary_y;
 
 float time_step;
 
-FILE* input_file;
-FILE* output_file;
+
 
 
 void calculateNextPositions();
 
-void initialize_simulation_memory(char *input_filename, char *output_filename);
+void initialize_simulation_memory(char *input_filename, int direction);
 
 void detect_wall_collision();
 
 void detect_ball_collision();
-
-void close_method();
 
 #endif

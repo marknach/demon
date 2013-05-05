@@ -1,43 +1,51 @@
 #include "vector_calc.h"
-
+#include <string.h>
 const int number_of_steps = 50;
-
+int forward;
 
 int main(int argc, char *argv[])
 {
-	if(argc != 3)
+	if(argc != 4)
 	{
-		printf("Usage is: simulation inputfile outputfile\n");
+		printf("Usage is: simulation inputfile outputfile direction, where direction is \"forward\" or \"reverse\"\n");
 		exit(0);
 	}
-	
-    initialize_simulation_memory(argv[1], argv[2]);
-	
-	
-	printf("Initial Values:\n");
+    if(strcmp(argv[3],"forward"))
+    {
+	forward = 1;
+    }
+    else
+    {
+        forward = -1;   
+    }
 
-    printf("%-12s%-12s%-12s%-12s%-12s%-12s\n","P_x","P_y","V_x","V_y","A_x","A_y");
+    initialize_simulation_memory(argv[1], forward);
+    printf("%d\n",number_of_vectors);	
+    
+
     for(int i = 0; i < number_of_vectors; i++)
     {
-        printf("%-12lf%-12lf%-12lf%-12lf%-12lf%-12lf\n", p[i][0], p[i][1], v[i][0], v[i][1], a[i][0], a[i][1]); 
+        printf("%lf,%lf\n", p[i][0], p[i][1]); 
     }
     
-    printf("\n");
+    //printf("\n");
     
 	
-	for(int i = 0; i < number_of_steps; i++)
+    for(int i = 0; i < number_of_steps; i++)
 	{
-		printf("Calculating New Positions (Step %d)\n", i + 1);
 		calculateNextPositions();
-		
-		printf("%-12s%-12s%-12s%-12s%-12s%-12s\n","P_x","P_y","V_x","V_y","A_x","A_y");
 		for(int i = 0; i < number_of_vectors; i++)
 		{
-			printf("%-12lf%-12lf%-12lf%-12lf%-12lf%-12lf\n", p[i][0], p[i][1], v[i][0], v[i][1], a[i][0], a[i][1]); 
+			 printf("%lf,%lf\n", p[i][0], p[i][1]);
 		}
-		printf("\n");
 	}
 	
-	close_method();
+	FILE* output_file = fopen(argv[2],"w");
+	
+	for(int i = 0; i < number_of_vectors; i++)
+	{
+		 fprintf(output_file,"%-12lf%-12lf%-12lf%-12lf%-12lf%-12lf%-12lf\n",p[i][0],p[i][1],v[i][0],v[i][1],a[i][0],a[i][1],r[i]);
+	}
+	fclose(output_file);
 	
 }
