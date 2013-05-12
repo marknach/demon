@@ -72,13 +72,13 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 		fscanf(input_file,"%f",&p[i][1]);
 		if(p[i][1] >= upper_boundary_y)
 		{
-			fprintf(stderr,"P_%d_x, value %lf exceeds boundary %lf\n",2, p[i][1], upper_boundary_y);
+			fprintf(stderr,"P_%d_y, value %lf exceeds boundary %lf\n",2, p[i][1], upper_boundary_y);
 			fprintf(stderr,("Program will now exit.\n"));
 			exit(1);
 		}
 		else if(p[i][1] <= lower_boundary_y)
 		{
-			fprintf(stderr,"P_%d_x, value %lf exceeds boundary %lf\n",2, p[i][1], lower_boundary_y);
+			fprintf(stderr,"P_%d_y, value %lf exceeds boundary %lf\n",2, p[i][1], lower_boundary_y);
 			fprintf(stderr,("Program will now exit.\n"))	;
 			exit(1);
 		}
