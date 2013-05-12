@@ -8,6 +8,7 @@ int number_of_vectors;
 float **p;
 float **v;
 float *r;
+float *m;
 
 float lower_boundary_x;
 float lower_boundary_y;
