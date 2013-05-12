@@ -6,6 +6,7 @@ void calculateNextPositions()
 {
 	for(int i = 0; i < number_of_vectors; i++)
 	{
+		mdloop();
 		p[i][0] += time_step * v[i][0];
 		p[i][1] += time_step * v[i][1];
 	}
@@ -16,7 +17,7 @@ void calculateNextPositions()
 
 void initialize_simulation_memory(char *input_filename,  int direction)
 {
-    	upper_boundary_x = 4;
+    upper_boundary_x = 4;
 	upper_boundary_y = 3;
 
 	
@@ -126,37 +127,6 @@ void detect_wall_collision()
 	}
 }
 
-// This method takes in two ints, and calculates the force of ball i on ball j, and modifies their current velocity accordingly.
-void calc_force(int i, int j)
-{
-	float fx = 12( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))(p[i][1]-p[j][1]);
-	float fy = 12( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))(p[i][2]-p[j][2]);
-	
-	//Calculates acceleration from f=ma
-	float ax1 = fx / m[i];
-	float ay1 = fy / m[i];
-	float ax2 = fx / m[j];
-	float ay2 = fy / m[j];
-	
-	//Uses acceleration to modify velocity in this step
-	v[i][1] += time_step * ax1;
-	v[i][2] += time_step * ay1;
-	v[j][1] += time_step * ax2;
-	v[j][2] += time_step * ay2;
-}
-
-void mdloop()
-{
-	int i, j;	
-	for(i = 0; i < number_of_vectors - 1; i++)
-	{
-		for(j = i+1; j < number_of_vectors; j++)
-		{
-			calc_force(i,j);
-		}
-	}
-}
-
 void detect_ball_collision()
 {
 	//Given the set of Balls in an array
@@ -192,6 +162,37 @@ void detect_ball_collision()
 				v[j][0] += (bcf - bci) * collision[0];
 				v[j][1] += (bcf - bci) * collision[1];
 			}
+		}
+	}
+}
+
+// This method takes in two ints, and calculates the force of ball i on ball j, and modifies their current velocity accordingly.
+void calc_force(int i, int j)
+{
+	float fx = 12*( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))*(p[i][1]-p[j][1]);
+	float fy = 12*( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))*(p[i][2]-p[j][2]);
+	
+	//Calculates acceleration from f=ma
+	float ax1 = fx / m[i];
+	float ay1 = fy / m[i];
+	float ax2 = fx / m[j];
+	float ay2 = fy / m[j];
+	
+	//Uses acceleration to modify velocity in this step
+	v[i][1] += time_step * ax1;
+	v[i][2] += time_step * ay1;
+	v[j][1] += time_step * ax2;
+	v[j][2] += time_step * ay2;
+}
+
+void mdloop()
+{
+	int i, j;	
+	for(i = 0; i < number_of_vectors - 1; i++)
+	{
+		for(j = i+1; j < number_of_vectors; j++)
+		{
+			calc_force(i,j);
 		}
 	}
 }

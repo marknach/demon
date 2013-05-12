@@ -29,4 +29,8 @@ void detect_wall_collision();
 
 void detect_ball_collision();
 
+void calc_force(int i, int j);
+
+void mdloop();
+
 #endif
