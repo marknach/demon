@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 		printf("Usage is: simulation inputfile outputfile direction visualson/visualsoff continuous/steps, where direction is \"forward\" or \"reverse\"\n");
 		exit(0);
 	}
-    if(strcmp(argv[3],"continuousforward") == 0)
+    if(strcmp(argv[3],"forward") == 0)
     {
 	forward = 1;
     }
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     else
     {
         continuous = 0;
-		number_of_steps = atoi(argv[5]);
+	number_of_steps = atoi(argv[5]);
     }
 
     initialize_simulation_memory(argv[1], forward);
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     {
         for(int i = 0; i < number_of_vectors; i++)
         {
-            printf("%lf,%lf\n", p[i][0], p[i][1]); 
+            printf("%lf,%lf,%lf\n", p[i][0], p[i][1], r[i]); 
         }
     }
     
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 				{
 				if(i % 10000 == 0)
 				{
-					printf("%lf,%lf\n", p[j][0], p[j][1]);
+					printf("%lf,%lf,%lf\n", p[j][0], p[j][1], r[j]);
 						}
 				}
 			}
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 				{
 				if(i % 10000 == 0)
 				{
-					printf("%lf,%lf\n", p[j][0], p[j][1]);
+					printf("%lf,%lf,%lf\n", p[j][0], p[j][1], r[j]);
 						}
 				}
 			}

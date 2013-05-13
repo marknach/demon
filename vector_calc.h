@@ -5,18 +5,18 @@
 #include <math.h>
 
 int number_of_vectors;
-float **p;
-float **v;
-float *r;
-float *m;
+double **p;
+double **v;
+double *r;
+double *m;
 
-float lower_boundary_x;
-float lower_boundary_y;
+double lower_boundary_x;
+double lower_boundary_y;
 
-float upper_boundary_x;
-float upper_boundary_y;
+double upper_boundary_x;
+double upper_boundary_y;
 
-float time_step;
+double time_step;
 
 
 

@@ -21,7 +21,7 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 	upper_boundary_y = 3;
 
 	
-	time_step = 0.00001;
+	time_step = 0.0000001;
 	
 	
 	FILE* input_file = fopen(input_filename, "r");
@@ -40,23 +40,24 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 	
 	//printf("\n");
 	//printf("Reading %d from %s.\n\n",number_of_vectors,input_filename);
-        p = (float **)malloc(number_of_vectors * sizeof(float *));
-        v = (float **)malloc(number_of_vectors * sizeof(float *));
-        r = (float *)malloc(number_of_vectors * sizeof(float *));
+        p = (double **)malloc(number_of_vectors * sizeof(double *));
+        v = (double **)malloc(number_of_vectors * sizeof(double *));
+        r = (double *)malloc(number_of_vectors * sizeof(double *));
+        m = (double *)malloc(number_of_vectors * sizeof(double *));
 	
 	fclose(input_file);
 	
 	
     for(int i = 0; i < number_of_vectors; i++)
     {
-		p[i] = (float *)malloc(2 * sizeof(float ));
-		v[i] = (float *)malloc(2 * sizeof(float ));
+		p[i] = (double *)malloc(2 * sizeof(double ));
+		v[i] = (double *)malloc(2 * sizeof(double ));
     }
 	
 	input_file = fopen(input_filename, "r");
     for(int i = 0; i < number_of_vectors; i++)
     {
-		fscanf(input_file,"%f",&p[i][0]);
+		fscanf(input_file,"%lf",&p[i][0]);
 		if(p[i][0] >= upper_boundary_x)
 		{
 			fprintf(stderr,"P_%d_x, value %lf exceeds boundary %lf\n",1, p[i][0], upper_boundary_x);
@@ -70,7 +71,7 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 			exit(1);
 		}
 		
-		fscanf(input_file,"%f",&p[i][1]);
+		fscanf(input_file,"%lf",&p[i][1]);
 		if(p[i][1] >= upper_boundary_y)
 		{
 			fprintf(stderr,"P_%d_y, value %lf exceeds boundary %lf\n",2, p[i][1], upper_boundary_y);
@@ -85,12 +86,14 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 		}
 		
 		
-		fscanf(input_file,"%f",&v[i][0]);
+		fscanf(input_file,"%lf",&v[i][0]);
 		v[i][0] *= direction;
-		fscanf(input_file,"%f",&v[i][1]);
+		fscanf(input_file,"%lf",&v[i][1]);
 		v[i][1] *= direction;
 		
-		fscanf(input_file,"%f",&r[i]);
+		fscanf(input_file,"%lf",&r[i]);
+		
+		fscanf(input_file,"%lf",&m[i]);
     }
 	fclose(input_file);
 }
@@ -103,26 +106,26 @@ void detect_wall_collision()
 	{
 		//hits vertical wall
 		//reverse
-		if(p[i][0] - r[i] <= lower_boundary_x)
+		if(p[i][0] - r[i] < lower_boundary_x)
 		{	
 			v[i][0] = -1 * v[i][0];
-			p[i][0] = lower_boundary_x + 0.0000001f + r[i]; //hacky way of making sure the balls don't leave the boundaries
+			p[i][0] = lower_boundary_x + r[i]; //hacky way of making sure the balls don't leave the boundaries
 		}
-		else if(p[i][0] + r[i] >= upper_boundary_x)
+		else if(p[i][0] + r[i] > upper_boundary_x)
 		{
 			v[i][0] = -1 * v[i][0];
-			p[i][0] = upper_boundary_x - 0.0000001f - r[i]; //hacky way of making sure the balls don't leave the boundaries
+			p[i][0] = upper_boundary_x - r[i]; //hacky way of making sure the balls don't leave the boundaries
 		}
 		//hits horizontal wall
-		if(p[i][1] - r[i] <= lower_boundary_y)
+		if(p[i][1] - r[i] < lower_boundary_y)
 		{
 			v[i][1] = -1 * v[i][1];
-			p[i][1] = lower_boundary_y + 0.0000001f + r[i]; //hacky way of making sure the balls don't leave the boundaries
+			p[i][1] = lower_boundary_y + r[i]; //hacky way of making sure the balls don't leave the boundaries
 		}
-		else if(p[i][1] + r[i] >= upper_boundary_y)
+		else if(p[i][1] + r[i] > upper_boundary_y)
 		{
 			v[i][1] = -1 * v[i][1];
-			p[i][1] = upper_boundary_y - 0.0000001f - r[i]; //hacky way of making sure the balls don't leave the boundaries
+			p[i][1] = upper_boundary_y - r[i]; //hacky way of making sure the balls don't leave the boundaries
 		}
 	}
 }
@@ -135,10 +138,10 @@ void detect_ball_collision()
 	{
 		for(j = i+1; j < number_of_vectors; j++)
 		{
-			float collision[2];
+			double collision[2];
 			collision[0] = p[i][0] - p[j][0];
 			collision[1] = p[i][1] - p[j][1];
-			float D = sqrt(((p[i][0] - p[j][0]) * (p[i][0] - p[j][0])) + ((p[i][1] - p[j][1]) * (p[i][1] - p[j][1])));
+			double D = sqrt(((p[i][0] - p[j][0]) * (p[i][0] - p[j][0])) + ((p[i][1] - p[j][1]) * (p[i][1] - p[j][1])));
 			
 			if(D == 0.0f)
 			{
@@ -151,11 +154,11 @@ void detect_ball_collision()
 			{
 				collision[0] /= D;
 				collision[1] /= D;
-				float aci = v[i][0] * collision[0] + v[i][1] * collision[1]; 
-				float bci = v[j][0] * collision[0] + v[j][1] * collision[1];
+				double aci = v[i][0] * collision[0] + v[i][1] * collision[1]; 
+				double bci = v[j][0] * collision[0] + v[j][1] * collision[1];
 
-				float acf = bci;
-				float bcf = aci;
+				double acf = bci;
+				double bcf = aci;
 
 				v[i][0] += (acf - aci) * collision[0];
 				v[i][1] += (acf - aci) * collision[1];
@@ -169,14 +172,14 @@ void detect_ball_collision()
 // This method takes in two ints, and calculates the force of ball i on ball j, and modifies their current velocity accordingly.
 void calc_force(int i, int j)
 {
-	float fx = 12*( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))*(p[i][1]-p[j][1]);
-	float fy = 12*( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))*(p[i][2]-p[j][2]);
+	double fx = 12*( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))*(p[i][1]-p[j][1]);
+	double fy = 12*( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))*(p[i][2]-p[j][2]);
 	
 	//Calculates acceleration from f=ma
-	float ax1 = fx / m[i];
-	float ay1 = fy / m[i];
-	float ax2 = fx / m[j];
-	float ay2 = fy / m[j];
+	double ax1 = fx / m[i];
+	double ay1 = fy / m[i];
+	double ax2 = fx / m[j];
+	double ay2 = fy / m[j];
 	
 	//Uses acceleration to modify velocity in this step
 	v[i][1] += time_step * ax1;
