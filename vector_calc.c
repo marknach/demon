@@ -28,7 +28,7 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 	upper_boundary_y = 3;
 
 	
-	time_step = 0.0000001;
+	time_step = 0.00001;
 	
 	
 	FILE* input_file = fopen(input_filename, "r");
