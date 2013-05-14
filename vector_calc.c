@@ -1,7 +1,10 @@
 #include "vector_calc.h"
 
 
-//Adding one unit of time velocity to position.
+/*
+ * Adds one unit of velocity to position, with attention to
+ * wall and ball collisions.
+ */ 
 void calculateNextPositions()
 {
 	for(int i = 0; i < number_of_vectors; i++)
@@ -15,6 +18,10 @@ void calculateNextPositions()
 	detect_wall_collision();
 }
 
+/*
+ * Initializes default parameters and memory for positions, velocities, radii, masses. Initializes other parameters from
+ * input file.
+ */ 
 void initialize_simulation_memory(char *input_filename,  int direction)
 {
     upper_boundary_x = 4;
@@ -99,7 +106,9 @@ void initialize_simulation_memory(char *input_filename,  int direction)
 }
 
 
-
+/**
+ * Detects if any balls hit a wall and reflect their velocities accordingly.
+ */
 void detect_wall_collision()
 {
 	for(int i = 0; i < number_of_vectors; i++)
@@ -130,6 +139,9 @@ void detect_wall_collision()
 	}
 }
 
+/**
+ * Detects if any balls hit another ball and redirect their velocities accordingly.
+ */
 void detect_ball_collision()
 {
 	//Given the set of Balls in an array
@@ -151,7 +163,9 @@ void detect_ball_collision()
 			}
 			//printf("D = %lf\n", D);
 			if(D < r[i] + r[j])
-			{
+			{/**
+ * Detects if any balls hit another ball and redirect their velocities accordingly.
+ */
 				collision[0] /= D;
 				collision[1] /= D;
 				double aci = v[i][0] * collision[0] + v[i][1] * collision[1]; 
@@ -169,7 +183,9 @@ void detect_ball_collision()
 	}
 }
 
-// This method takes in two ints, and calculates the force of ball i on ball j, and modifies their current velocity accordingly.
+/*
+ * Takes in two ints, and calculates the force of ball i on ball j, and modifies their current velocity accordingly.
+ */
 void calc_force(int i, int j)
 {
 	double fx = 12*( (1/(abs(r[i]-r[j])^14))-(1/(abs(r[i]-r[j])^8)))*(p[i][1]-p[j][1]);
@@ -188,6 +204,9 @@ void calc_force(int i, int j)
 	v[j][2] += time_step * ay2;
 }
 
+/*
+ * Loops through all i, j, i != j, calls calc_force, such that all forces for i,j pairs for i !=j is calculated.
+ */
 void mdloop()
 {
 	int i, j;	
